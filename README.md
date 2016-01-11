@@ -19,4 +19,4 @@ done!
 ## Dev2 Links
 
 * [Setup & Installation](https://github.com/ejanus/dev2/wiki)
-* [Default vhost files](https://github.com/ejanus/dev2-vhost-defaults/wiki)
+* [Default vhost files](https://github.com/ejanus/dev2-vhost-defaults)
