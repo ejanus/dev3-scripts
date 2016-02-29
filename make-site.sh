@@ -313,7 +313,7 @@ mysql -u ${db_root_user} -p -e "${dbstring}"
 
 # install drupal
 cd ${path_siteroot}
-drush site-install standard --db-url="mysql://${db_site_user}:${db_site_pass}@maindb/${project_name}" --site-name="${site_name}" --account-name="jnradmin"  --account-pass="dev2admin" --account-mail="ejanus@jnrcorp.com" -y
+drush site-install standard --db-url="mysql://${db_site_user}:${db_site_pass}@maindb/${project_name}" --site-name="${site_name}" --account-name="dev2admin"  --account-pass="dev2admin" --account-mail="admin@example.com" -y
 
 # first, create contrib/custom folders
 mkdir ${path_siteroot}/sites/all/modules/custom
