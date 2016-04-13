@@ -80,7 +80,7 @@ path_vhosts='/etc/apache2/sites-available'
 vhost_drupal_template='drupal-default.conf'
 vhost_project=${project_name}.conf
 path_webroot='/var/www/html'
-host_name=${project_name}'.dev2.com'
+host_name=${project_name}'.dev3.com'
 project_tmpdir='/var/tmp/'${project_name}
 
 if [ -z "${site_root}" ]; then

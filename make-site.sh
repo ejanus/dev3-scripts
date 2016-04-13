@@ -106,7 +106,7 @@ else
   path_siteroot=${path_webroot}/${project_name}/${site_root}
 fi
 
-host_name=${project_name}'.dev2.com'
+host_name=${project_name}'.dev3.com'
 
 db_root_user='root'
 
@@ -210,16 +210,6 @@ extra_steps() {
 
   # pathologic 
   drush en pathologic -y
-
-  #font awesome
-  drush en fontawesome -y
-  #get fontawesome library
-  drush fadl -y 
-
-  # install zen subtheme
-  drush en zen -y
-  drush cc all
-  drush zen "${site_name}" ${project_name}
 }
 
 ## add aliases
@@ -290,7 +280,7 @@ enable_site() {
 
 # sometimes, for some reason, drush permissions are screwed up
 # here we make sure they are correct before moving on
-chown -R dev /home/dev/.composer/vendor/bin/drush
+# chown -R dev /usr/local/bin/drush
 
 # download drupal
 cd ${path_webroot}
@@ -298,12 +288,12 @@ cd ${path_webroot}
 # if the site root was not specified then just install into a new folder based on project name
 # else, cd into the project name and install into the site root folder specified
 if [ -z "${site_root}" ]; then
-  drush dl drupal --drupal-project-rename=${project_name}
+  drush dl drupal-7 --drupal-project-rename=${project_name}
 else 
   mkdir -p ${project_name}
   chown :www-data ${project_name}
   cd ${project_name}
-  drush dl drupal --drupal-project-rename=${site_root}
+  drush dl drupal-7 --drupal-project-rename=${site_root}
 fi
 
 # create the database and user for the project
@@ -313,7 +303,7 @@ mysql -u ${db_root_user} -p -e "${dbstring}"
 
 # install drupal
 cd ${path_siteroot}
-drush site-install standard --db-url="mysql://${db_site_user}:${db_site_pass}@maindb/${project_name}" --site-name="${site_name}" --account-name="dev2admin"  --account-pass="dev2admin" --account-mail="admin@example.com" -y
+drush site-install standard --db-url="mysql://${db_site_user}:${db_site_pass}@localhost/${project_name}" --site-name="${site_name}" --account-name="dev3admin"  --account-pass="dev3admin" --account-mail="admin@example.com" -y
 
 # first, create contrib/custom folders
 mkdir ${path_siteroot}/sites/all/modules/custom
