@@ -117,9 +117,6 @@ add_tmp_dir() {
   mkdir -p ${project_tmpdir}
   chown -R dev:www-data ${project_tmpdir}
   chmod -R 770 ${project_tmpdir}
-
-  # add tmp directory to settings.php
-  echo -e "\$conf['file_temporary_path'] = '"${project_tmpdir}"';" >> ${path_siteroot}/sites/default/settings.php
 }
 
 ## add aliases
