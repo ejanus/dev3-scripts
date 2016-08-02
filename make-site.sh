@@ -144,6 +144,7 @@ finalize() {
   
   enable_site
   add_aliases 
+  add_tmp_dir
  
   echo "done!"
   exit 0
@@ -212,6 +213,18 @@ extra_steps() {
   drush en pathologic -y
 }
 
+# add and configure tmp directory
+add_tmp_dir() {
+  # setup temp directory for use
+  mkdir -p ${project_tmpdir}
+  chown -R dev:www-data ${project_tmpdir}
+  chmod -R 770 ${project_tmpdir}
+
+  # add tmp directory to settings.php
+  echo -e "\$conf['file_temporary_path'] = '"${project_tmpdir}"';" >> ${path_siteroot}/sites/default/settings.php
+}
+
+
 ## add aliases
 add_aliases() {
   ## add some helpful aliases
@@ -263,14 +276,6 @@ enable_site() {
   else 
     echo -e "127.0.0.1\t"${host_name} >> /etc/hosts
   fi
-
-  # setup temp directory for use
-  mkdir -p ${project_tmpdir}
-  chown -R dev:www-data ${project_tmpdir}
-  chmod -R 770 ${project_tmpdir}
-
-  # add tmp directory to settings.php
-  echo -e "\$conf['file_temporary_path'] = '"${project_tmpdir}"';" >> ${path_siteroot}/sites/default/settings.php 
 }
 
 

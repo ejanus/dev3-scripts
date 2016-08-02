@@ -105,9 +105,21 @@ finalize() {
   
   enable_site
   add_aliases 
+  add_tmp_dir
  
   echo "done!"
   exit 0
+}
+
+## add temp directory for site
+add_tmp_dir() {
+  # setup temp directory for use
+  mkdir -p ${project_tmpdir}
+  chown -R dev:www-data ${project_tmpdir}
+  chmod -R 770 ${project_tmpdir}
+
+  # add tmp directory to settings.php
+  echo -e "\$conf['file_temporary_path'] = '"${project_tmpdir}"';" >> ${path_siteroot}/sites/default/settings.php
 }
 
 ## add aliases
@@ -137,11 +149,6 @@ add_aliases() {
     sed -i "/#dbdump-site/a alias dbdump-${project_name}='FILE_LOC_NAME=~/dbdumps-loc/${project_name}/${project_name}_loc_\$(getDateForFile).sql &&  mysqldump -u root -p ${db_name} > \$FILE_LOC_NAME; echo \$FILE_LOC_NAME created successfully!'" /home/dev/.bash_aliases
     #sed -i "/#dbdump-site/a alias dbdump-${project_name}='mkdir -p ~/dbdumps-loc/${project_name}; mysqldump -u root -p ${db_name} > ~/dbdumps-loc/${project_name}/${project_name}_loc_\$(getDateForFile).sql; ls -ABrt1 --group-directories-first ~/dbdumps-loc/${project_name}/ | tail -n1'" /home/dev/.bash_aliases
   fi
-
-  # setup temp directory for use
-  mkdir -p ${project_tmpdir}
-  chown -R dev:www-data ${project_tmpdir}
-  chmod -R 770 ${project_tmpdir}
 }
 
 ## enable drupal site on apache
