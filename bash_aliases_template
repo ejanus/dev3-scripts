@@ -13,6 +13,8 @@ getDrupalPassHash() {
 
 #Drupal sites
 alias drupal-pass=getDrupalPassHash
+alias fix-drush="sudo chown -R $USER ~/.drush"
+alias dcc="drush cc all"
 
 #apache
 alias sites="cd /var/www/html; ls -lha"
@@ -29,11 +31,9 @@ alias mysql-pass="apg -m 16 -n 1 -a 1 -M NCL"
 alias php-mods="dpkg --list | grep php"
 
 # other helpful aliases
-alias fix-drush="sudo chown -R $USER ~/.drush"
 alias src-bashrc="source $HOME/.bashrc"
 alias src-aliases="unalias -a && source $HOME/.bash_aliases"
 alias lookfor='grep -rl'
-alias dcc="drush cc all"
 alias count="ls -l | wc -l"
 alias fsize=getfoldersize
 alias clear-bash="cat /dev/null > ~/.bash_history && history -c"
