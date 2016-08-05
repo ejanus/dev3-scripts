@@ -1,0 +1,64 @@
+# assist functions (DO NOT REMOVE)
+getDateForFile() {
+  date +%Y%m%d_%H%M;
+}
+getfoldersize() {
+  du -hs $1;
+}
+getDrupalPassHash() {
+  php ./scripts/password-hash.sh $1;
+}
+
+## MISC ALIASES
+
+#Drupal sites
+alias drupal-pass=getDrupalPassHash
+
+#apache
+alias sites="cd /var/www/html; ls -lha"
+alias sites-av="cd /etc/apache2/sites-available; ls -lha"
+alias sites-en="cd /etc/apache2/sites-enabled; ls -lha"
+alias sites-log="cd /var/log/apache2; ls -lha"
+alias sites-config="cd /etc/apache2; ls -lha"
+
+#mysql
+alias mysql-log="cd /var/log/mysql; ls -lha"
+alias mysql-pass="apg -m 16 -n 1 -a 1 -M NCL"
+
+#php
+alias php-mods="dpkg --list | grep php"
+
+# other helpful aliases
+alias fix-drush="sudo chown -R $USER ~/.drush"
+alias src-bashrc="source $HOME/.bashrc"
+alias src-aliases="unalias -a && source $HOME/.bash_aliases"
+alias lookfor='grep -rl'
+alias dcc="drush cc all"
+alias count="ls -l | wc -l"
+alias fsize=getfoldersize
+alias clear-bash="cat /dev/null > ~/.bash_history && history -c"
+alias fsizel="du -sm * | sort -n"
+alias listf="ls -l | awk '{print $9}'"
+alias ssh-aliases="cat ~/.ssh/config | grep Host'\s'"
+alias time-sync="sudo ntpdate time.nist.gov"
+
+## DRUPAL 
+
+#make site
+alias make-site="sudo bash ~/scripts/make-site.sh"
+
+#prep site
+alias prep-site="sudo bash ~/scripts/prep-site.sh"
+
+## DRUPAL SITE SPECIFIC ALIASES
+
+#sites (DO NOT REMOVE THIS COMMENT)
+
+
+#fix-site-permissions (DO NOT REMOVE THIS COMMENT)
+
+
+#dbdump-site (DO NOT REMOVE THIS COMMENT)
+
+                                                                                                                                  86,0-1        Bot
+
