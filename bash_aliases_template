@@ -8,6 +8,12 @@ getfoldersize() {
 getDrupalPassHash() {
   php ./scripts/password-hash.sh $1;
 }
+findFile() {
+  find . -type f -name "$1"
+}
+grepShow() {
+  grep -rl "$1" | xargs grep -H "$1"
+}
 
 ## MISC ALIASES
 
@@ -15,6 +21,8 @@ getDrupalPassHash() {
 alias drupal-pass=getDrupalPassHash
 alias fix-drush="sudo chown -R $USER ~/.drush"
 alias dcc="drush cc all"
+alias drush-enabled="drush pm-list --type=Module --status=enabled"
+alias drush-disabled="drush pm-list --type=Module --status=disabled"
 
 #apache
 alias sites="cd /var/www/html; ls -lha"
@@ -34,6 +42,7 @@ alias php-mods="dpkg --list | grep php"
 alias src-bashrc="source $HOME/.bashrc"
 alias src-aliases="unalias -a && source $HOME/.bash_aliases"
 alias lookfor='grep -rl'
+alias lookfor-show=grepShow
 alias count="ls -l | wc -l"
 alias fsize=getfoldersize
 alias clear-bash="cat /dev/null > ~/.bash_history && history -c"
@@ -41,6 +50,7 @@ alias fsizel="du -sm * | sort -n"
 alias listf="ls -l | awk '{print $9}'"
 alias ssh-aliases="cat ~/.ssh/config | grep Host'\s'"
 alias time-sync="sudo ntpdate time.nist.gov"
+alias find-file=findFile
 
 ## DRUPAL 
 
