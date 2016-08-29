@@ -38,6 +38,9 @@ alias mysql-pass="apg -m 16 -n 1 -a 1 -M NCL"
 #php
 alias php-mods="dpkg --list | grep php"
 
+#git
+alias git-noperms="git config core.fileMode false"
+
 # other helpful aliases
 alias src-bashrc="source $HOME/.bashrc"
 alias src-aliases="unalias -a && source $HOME/.bash_aliases"
