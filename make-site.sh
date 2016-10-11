@@ -99,6 +99,7 @@ vhost_drupal_template='drupal-default.conf'
 vhost_project=${project_name}.conf
 path_webroot='/var/www/html'
 project_tmpdir='/var/tmp/'${project_name}
+dbdumps_loc='/home/dev/dbdumps-loc/'${project_name}
 
 if [ -z "${site_root}" ]; then
   path_siteroot=${path_webroot}/${project_name}
@@ -229,22 +230,22 @@ add_tmp_dir() {
 add_aliases() {
   ## add some helpful aliases
 
-  # add go-[site] to .bash_alias file
+  # add go-[site] to .bash_aliases file
   if grep -q "go-${project_name}" /home/dev/.bash_aliases; then
     echo 'go alias already exists'
   else  
     sed -i  "/#sites/a alias go-${project_name}=\"cd ${path_siteroot}\"" /home/dev/.bash_aliases
   fi 
 
-  # add fixp-[site] to .bash_alias file
+  # add fixp-[site] to .bash_aliases file
   if grep -q "fixp-${project_name}" /home/dev/.bash_aliases; then
     echo 'fix permission alias already exists' 
   else 
     sed -i "/#fix-site-permissions/a alias fixp-${project_name}=\"sudo bash /home/dev/scripts/fix-permissions.sh --drupal_path=${path_siteroot} --drupal_user=dev\"" /home/dev/.bash_aliases
   fi
 
-  # add dbdump-[site] to .bash_alias file
-  mkdir -p /home/dev/dbdumps-loc/${project_name}
+  # add dbdump-[site] to .bash_aliases file
+  mkdir -p ${dbdumps_loc}
   chown -R dev:dev /home/dev/dbdumps-loc
   if grep -q "dbdump-${project_name}" /home/dev/.bash_aliases; then
     echo 'dbdump alias already exists' 
@@ -303,7 +304,7 @@ fi
 
 # create the database and user for the project
 dbstring="CREATE DATABASE ${project_name}; GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES ON ${project_name}.* TO '${db_site_user}'@'localhost' IDENTIFIED BY '${db_site_pass}';"
-mysql -u ${db_root_user} -p -e "${dbstring}"
+mysql -e "${dbstring}"
 
 
 # install drupal

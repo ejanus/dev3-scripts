@@ -63,6 +63,9 @@ alias make-site="sudo bash ~/scripts/make-site.sh"
 #prep site
 alias prep-site="sudo bash ~/scripts/prep-site.sh"
 
+#remove site 
+alias rm-site="sudo bash ~/scripts/rm-site.sh"
+
 ## DRUPAL SITE SPECIFIC ALIASES
 
 #sites (DO NOT REMOVE THIS COMMENT)
