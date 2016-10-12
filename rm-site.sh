@@ -85,6 +85,7 @@ db_site_user=$(echo ${project_name} | cut -c 1-16)
 ## complete function let user know everything went well
 finalize() {
   disable_site
+  remove_hosts
   remove_aliases
   remove_tmp_dir
   remove_project
@@ -93,6 +94,12 @@ finalize() {
   remove_logs
 
   echo "done!"
+  echo ""
+  echo "IMPORTANT: To clear your alias cache please run the following command:"
+  echo ""
+  echo "src-aliases && src-bashrc"
+  echo ""
+  
   exit 0
 }
 
@@ -102,25 +109,28 @@ remove_logs() {
   if [ -f "${site_logs}/${project_name}-access.log" ]; then
     # remove access log
     rm ${site_logs}/${project_name}-access.log
+    echo " -- removed access log"
   else
-    echo 'access log does not exist'
+    echo ' ** access log does not exist'
   fi
-  
+
   # error log
   if [ -f "${site_logs}/${project_name}-error.log" ]; then
     # remove access log
     rm ${site_logs}/${project_name}-error.log
+    echo " -- removed error log"
   else
-    echo 'error log does not exist'
-  fi  
+    echo ' ** error log does not exist'
+  fi
 }
 
 ## remove database dumps folder
 remove_dbdumps() {
   if [ -d "${dbdumps_loc}" ]; then
     rm -rf ${dbdumps_loc}
+    echo " -- database dump folder removed"
   else
-    echo 'database dump folder does not exist'
+    echo ' ** database dump folder does not exist'
   fi
 }
 
@@ -135,8 +145,9 @@ remove_db() {
 remove_project() {
   if [ -d "${path_webroot}/${project_name}" ]; then
     rm -rf ${path_webroot}/${project_name}
+    echo " -- site folder removed"
   else
-    echo 'project folder does not exist'
+    echo ' ** site folder does not exist'
   fi
 }
 
@@ -144,8 +155,9 @@ remove_project() {
 remove_tmp_dir() {
   if [ -d "${project_tmpdir}" ]; then
     rm -rf ${project_tmpdir}
+    echo " -- temp directory removed"
   else
-    echo 'project temp directory does not exist'
+    echo ' ** project temp directory does not exist'
   fi
 }
 
@@ -154,22 +166,36 @@ remove_aliases() {
   # remove go-[site] from .bash_aliases file
   if grep -q "go-${project_name}=" /home/dev/.bash_aliases; then
     sed -i "/go-${project_name}=/d" /home/dev/.bash_aliases
+    echo " -- removed go alias"
   else
-    echo 'no go alias exists'
+    echo ' ** no go alias exists'
   fi
 
   # remove fixp-[site] from .bash_aliases file
-  if grep -q "fixp-${project_name}" /home/dev/.bash_aliases; then
+  if grep -q "fixp-${project_name}=" /home/dev/.bash_aliases; then
     sed -i "/fixp-${project_name}=/d" /home/dev/.bash_aliases
+    echo " -- removed fixp alias"
   else
-    echo 'no fix permission alias exists'
+    echo ' ** no fix permission alias exists'
   fi
 
   # remove dbdump-[site] from .bash_aliases file
-  if grep -q "dbdump-${project_name}" /home/dev/.bash_aliases; then
+  if grep -q "dbdump-${project_name}=" /home/dev/.bash_aliases; then
     sed -i "/dbdump-${project_name}=/d" /home/dev/.bash_aliases
+    echo " -- removed dbdump alias"
   else
-    echo 'no dbdump alias exists'
+    echo ' ** no dbdump alias exists'
+  fi
+}
+
+## remove hosts entry
+remove_hosts() {
+  # remove hosts entry
+  if grep -q ${host_name} /etc/hosts; then
+    sed -i "/${host_name}/d" /etc/hosts
+    echo " -- removed hosts entry"
+  else
+    echo ' ** host entry does not exist'
   fi
 }
 
@@ -183,17 +209,11 @@ disable_site() {
     a2dissite ${vhost_project}
     # reload apache
     service apache2 reload
+    echo " -- disabled vhost entry"
     # remove vhost file
     rm ${vhost_project}
   else
-    echo 'vhost does not exist'
-  fi
-
-  # remove hosts entry
-  if grep -q ${host_name} /etc/hosts; then
-    sed -i "/${host_name}/d" /etc/hosts
-  else
-    echo 'host entry does not exist'
+    echo ' ** vhost does not exist'
   fi
 }
 

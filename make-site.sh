@@ -3,7 +3,7 @@
 ## Help menu
 print_help() {
   cat <<-HELP
-This script is used to perform all initial steps to setup a new Drupal site. 
+This script is used to perform all initial steps to setup a new Drupal site.
 
 You will need to provide the following:
 
@@ -12,23 +12,23 @@ You will need to provide the following:
 (optional) --site_root=[site_root] - specify the site root folder relative to the project folder. No spaces.
 (optional) --quick_install=[Y/n] - specifiy if this should do a basic install or perform extra steps after the quick install. Defautls to Yes [Y]
 
-Example - extra modules with site root specified: 
+Example - extra modules with site root specified:
 bash ${0##*/} --project_name=mynewsite --site_name='My test site' --site_root='htdocs' --quick_install=N
 
-Example - vanilla modules with site root specified: 
+Example - vanilla modules with site root specified:
 bash ${0##*/} --project_name=mynewsite --site_name='My test site' --site_root='htdocs'
 
-Example - vanilla modules: 
-bash ${0##*/} --project_name=mynewsite --site_name='My test site' 
+Example - vanilla modules:
+bash ${0##*/} --project_name=mynewsite --site_name='My test site'
 
-Example - extra modules: 
+Example - extra modules:
 bash ${0##*/} --project_name=mynewsite --site_name='My test site' --quick_install=N
 HELP
   exit 0
 }
 
 
-# must run with sudo 
+# must run with sudo
 if [ $(id -u) != 0 ]; then
   printf "***************************************\n"
   printf "* Error: You must run this with sudo. *\n"
@@ -60,7 +60,7 @@ while [ $# -gt 0 ]; do
     --quick_install=[Yn])
       quick_install="${1#*=}"
       ;;
-    --help) 
+    --help)
       print_help
       ;;
     *)
@@ -103,7 +103,7 @@ dbdumps_loc='/home/dev/dbdumps-loc/'${project_name}
 
 if [ -z "${site_root}" ]; then
   path_siteroot=${path_webroot}/${project_name}
-else 
+else
   path_siteroot=${path_webroot}/${project_name}/${site_root}
 fi
 
@@ -131,23 +131,29 @@ fi
 
 
 #################################################
-### since functions use variables from above, ### 
+### since functions use variables from above, ###
 ### they are declared here                    ###
 #################################################
 
 ## complete function let user know everything went well and fix permissions
 finalize() {
   # update file ownership
-  # chown -R ${user}:${web_user} ${path_siteroot} 
+  # chown -R ${user}:${web_user} ${path_siteroot}
 
   # fix permissions
   bash /home/dev/scripts/fix-permissions.sh --drupal_path=${path_siteroot} --drupal_user=dev
-  
+
   enable_site
-  add_aliases 
+  add_aliases
   add_tmp_dir
- 
+
   echo "done!"
+  echo ""
+  echo "IMPORTANT: To clear your alias cache please run the following command:"
+  echo ""
+  echo "src-aliases && src-bashrc"
+  echo ""
+
   exit 0
 }
 
@@ -166,7 +172,7 @@ extra_steps() {
   drush pm-uninstall color -y
   # turn off comments
   drush dis comment -y
-  # turn off dashboard 
+  # turn off dashboard
   drush dis dashboard -y
 
   ## add modules
@@ -178,7 +184,7 @@ extra_steps() {
   # libraries
   drush en libraries -y
   mkdir ${path_siteroot}/sites/all/libraries
-  # path auto 
+  # path auto
   drush en pathauto -y
   # devel for dpm and other site info
   drush en devel -y
@@ -189,9 +195,9 @@ extra_steps() {
   drush en block_class -y
   # views because what site doesn't need views?
   drush en views -y
-  drush en views_ui -y 
+  drush en views_ui -y
   # backup and migrate module
-  #drush en backup_migrate -y 
+  #drush en backup_migrate -y
   # jquery update
   drush en jquery_update -y
   # fences reduces theming clutter
@@ -210,19 +216,25 @@ extra_steps() {
   # move back to site root
   cd ${path_siteroot}
 
-  # pathologic 
+  # pathologic
   drush en pathologic -y
 }
 
 # add and configure tmp directory
 add_tmp_dir() {
-  # setup temp directory for use
-  mkdir -p ${project_tmpdir}
-  chown -R dev:www-data ${project_tmpdir}
-  chmod -R 770 ${project_tmpdir}
+  if [ -d "${project_tmpdir}" ]; then
+    echo ' ** temp directory already exists at '${project_tmpdir}
+  else
+    # setup temp directory for use
+    mkdir -p ${project_tmpdir}
+    chown -R dev:www-data ${project_tmpdir}
+    chmod -R 770 ${project_tmpdir}
 
-  # add tmp directory to settings.php
-  echo -e "\$conf['file_temporary_path'] = '"${project_tmpdir}"';" >> ${path_siteroot}/sites/default/settings.php
+    # add tmp directory to settings.php
+    echo -e "\$conf['file_temporary_path'] = '"${project_tmpdir}"';" >> ${path_siteroot}/sites/default/settings.php
+
+    echo ' -- temp directory created at '${project_tmpdir}
+  fi
 }
 
 
@@ -232,50 +244,55 @@ add_aliases() {
 
   # add go-[site] to .bash_aliases file
   if grep -q "go-${project_name}" /home/dev/.bash_aliases; then
-    echo 'go alias already exists'
-  else  
+    echo ' ** go alias already exists'
+  else
     sed -i  "/#sites/a alias go-${project_name}=\"cd ${path_siteroot}\"" /home/dev/.bash_aliases
-  fi 
+    echo ' -- go to site folder alias created as go-'${project_name}
+  fi
 
   # add fixp-[site] to .bash_aliases file
   if grep -q "fixp-${project_name}" /home/dev/.bash_aliases; then
-    echo 'fix permission alias already exists' 
-  else 
+    echo ' ** fix permission alias already exists'
+  else
     sed -i "/#fix-site-permissions/a alias fixp-${project_name}=\"sudo bash /home/dev/scripts/fix-permissions.sh --drupal_path=${path_siteroot} --drupal_user=dev\"" /home/dev/.bash_aliases
+    echo ' -- fix permission alias created as fixp-'${project_name}
   fi
 
   # add dbdump-[site] to .bash_aliases file
   mkdir -p ${dbdumps_loc}
   chown -R dev:dev /home/dev/dbdumps-loc
   if grep -q "dbdump-${project_name}" /home/dev/.bash_aliases; then
-    echo 'dbdump alias already exists' 
-  else 
+    echo ' ** dbdump alias already exists'
+  else
     sed -i "/#dbdump-site/a alias dbdump-${project_name}='FILE_LOC_NAME=~/dbdumps-loc/${project_name}/${project_name}_loc_\$(getDateForFile).sql &&  mysqldump -u root -p ${project_name} > \$FILE_LOC_NAME; echo \$FILE_LOC_NAME created successfully!'" /home/dev/.bash_aliases
     #sed -i "/#dbdump-site/a alias dbdump-${project_name}='mkdir -p ~/dbdumps-loc/${project_name}; mysqldump -u root -p ${project_name} > ~/dbdumps-loc/${project_name}/${project_name}_loc_\$(getDateForFile).sql; ls -ABrt1 --group-directories-first ~/dbdumps-loc/${project_name}/ | tail -n1'" /home/dev/.bash_aliases
+    echo ' -- db dump alias created as dbdump-'${project_name}
   fi
 }
 
 ## enable drupal site on apache
 enable_site() {
   cd ${path_vhosts}
-  
+
   # create vhosts file from drupal_default
   if [ -d "${vhost_project}" ]; then
-    echo 'vhost file already exists'
-  else 
+    echo ' ** vhost file already exists'
+  else
     sed "s/PROJECT/${project_name}/g" ${vhost_drupal_template} > ${vhost_project}
     sed -i 's|SITE_ROOT|'${path_siteroot}'|g' ${vhost_project}
     # enable site
     a2ensite ${vhost_project}
     # reload apache
     service apache2 reload
-  fi 
+    echo ' -- vhost entry created and apache reloaded'
+  fi
 
   # add hosts entry
-  if grep -q ${host_name} /etc/hosts; then 
-    echo 'host entry already exists'
-  else 
+  if grep -q ${host_name} /etc/hosts; then
+    echo ' ** host entry already exists'
+  else
     echo -e "127.0.0.1\t"${host_name} >> /etc/hosts
+    echo " -- hosts file entry added as 127.0.0.1\t"${host_name}
   fi
 }
 
@@ -284,10 +301,6 @@ enable_site() {
 ### create drupal site ###
 ##########################
 
-# sometimes, for some reason, drush permissions are screwed up
-# here we make sure they are correct before moving on
-# chown -R dev /usr/local/bin/drush
-
 # download drupal
 cd ${path_webroot}
 
@@ -295,30 +308,34 @@ cd ${path_webroot}
 # else, cd into the project name and install into the site root folder specified
 if [ -z "${site_root}" ]; then
   drush dl drupal-7 --drupal-project-rename=${project_name}
-else 
+else
   mkdir -p ${project_name}
   chown :www-data ${project_name}
   cd ${project_name}
   drush dl drupal-7 --drupal-project-rename=${site_root}
+  echo ' -- Drupal downloaded'
 fi
 
 # create the database and user for the project
 dbstring="CREATE DATABASE ${project_name}; GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES ON ${project_name}.* TO '${db_site_user}'@'localhost' IDENTIFIED BY '${db_site_pass}';"
 mysql -e "${dbstring}"
 
-
 # install drupal
 cd ${path_siteroot}
 drush site-install standard --db-url="mysql://${db_site_user}:${db_site_pass}@localhost/${project_name}" --site-name="${site_name}" --account-name="dev3admin"  --account-pass="dev3admin" --account-mail="admin@example.com" -y
+echo ' -- Drupal installed'
+
 
 # first, create contrib/custom folders
 mkdir ${path_siteroot}/sites/all/modules/custom
 mkdir ${path_siteroot}/sites/all/modules/contrib
+echo ' -- Drupal custom/contrib module paths created'
 
 # if this is a quick install, don't bother with the below stuff
 if [ $quick_install == 'n' ]; then
   extra_steps
-fi  
+  echo ' -- Drupal extra contrib moduels, scripts, theme, and settings installed'
+fi
 
 # all set so run complete function
 finalize
