@@ -108,13 +108,14 @@ finalize() {
   add_aliases
   add_tmp_dir
 
+  echo ""
   echo "done!"
   echo ""
   echo "IMPORTANT: To clear your alias cache please run the following command:"
   echo ""
   echo "src-aliases && src-bashrc"
   echo ""
-  
+
   exit 0
 }
 
@@ -127,7 +128,7 @@ add_tmp_dir() {
     # setup temp directory for use
     mkdir -p ${project_tmpdir}
     chown -R dev:www-data ${project_tmpdir}
-    chmod -R 770 ${project_tmpdir}    
+    chmod -R 770 ${project_tmpdir}
   fi
 }
 

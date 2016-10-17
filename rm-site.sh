@@ -84,6 +84,8 @@ db_site_user=$(echo ${project_name} | cut -c 1-16)
 
 ## complete function let user know everything went well
 finalize() {
+  echo ""
+
   disable_site
   remove_hosts
   remove_aliases
@@ -93,13 +95,14 @@ finalize() {
   remove_dbdumps
   remove_logs
 
+  echo ""
   echo "done!"
   echo ""
   echo "IMPORTANT: To clear your alias cache please run the following command:"
   echo ""
   echo "src-aliases && src-bashrc"
   echo ""
-  
+
   exit 0
 }
 
@@ -128,7 +131,7 @@ remove_logs() {
 remove_dbdumps() {
   if [ -d "${dbdumps_loc}" ]; then
     rm -rf ${dbdumps_loc}
-    echo " -- database dump folder removed"
+    echo " -- removed database dump folder"
   else
     echo ' ** database dump folder does not exist'
   fi
@@ -145,7 +148,7 @@ remove_db() {
 remove_project() {
   if [ -d "${path_webroot}/${project_name}" ]; then
     rm -rf ${path_webroot}/${project_name}
-    echo " -- site folder removed"
+    echo " -- removed site folder"
   else
     echo ' ** site folder does not exist'
   fi
@@ -155,7 +158,7 @@ remove_project() {
 remove_tmp_dir() {
   if [ -d "${project_tmpdir}" ]; then
     rm -rf ${project_tmpdir}
-    echo " -- temp directory removed"
+    echo " -- removed temp directory"
   else
     echo ' ** project temp directory does not exist'
   fi

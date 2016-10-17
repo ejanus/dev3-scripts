@@ -147,6 +147,7 @@ finalize() {
   add_aliases
   add_tmp_dir
 
+  echo ""
   echo "done!"
   echo ""
   echo "IMPORTANT: To clear your alias cache please run the following command:"
