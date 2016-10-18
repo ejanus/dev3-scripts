@@ -83,6 +83,15 @@ if [ -z "${project_name}" ]; then
   exit 1
 fi
 
+valid_regex='a-z0-9_'
+
+if [[ $project_name =~ [^$valid_regex] ]]; then
+  printf "************************************************************************************\n"
+  printf "* Error: project_name may only contain lowercase letters, numbers, and underscores *\n"
+  printf "************************************************************************************\n"
+  exit 1
+fi
+
 if [ -z "${site_name}" ]; then
   printf "**************************************\n"
   printf "* Error: Please provide a site name. *\n"
