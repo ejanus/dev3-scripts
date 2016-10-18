@@ -86,9 +86,9 @@ fi
 valid_regex='a-z0-9_'
 
 if [[ $project_name =~ [^$valid_regex] ]]; then
-  printf "************************************************************************************\n"
-  printf "* Error: project_name may only contain lowercase letters, numbers, and underscores *\n"
-  printf "************************************************************************************\n"
+  printf "*******************************************************************************************************************\n"
+  printf "* Error: This script only works with a project_name that only contain lowercase letters, numbers, and underscores *\n"
+  printf "*******************************************************************************************************************\n"
   exit 1
 fi
 
