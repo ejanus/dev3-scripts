@@ -167,7 +167,7 @@ add_aliases() {
   if grep -q "dbdump-${project_name}" /home/dev/.bash_aliases; then
     echo ' ** dbdump alias already exists'
   else
-    sed -i "/#dbdump-site/a alias dbdump-${project_name}='FILE_LOC_NAME=~/dbdumps-loc/${project_name}/${project_name}_loc_\$(getDateForFile).sql &&  mysqldump ${db_name} > \$FILE_LOC_NAME; echo \$FILE_LOC_NAME created successfully!'" /home/dev/.bash_aliases
+    sed -i "/#dbdump-site/a alias dbdump-${project_name}='FILE_LOC_NAME=~/dbdumps-loc/${project_name}/${project_name}_loc_\$(getDateForFile).sql &&  mysqldump -u root -p ${db_name} > \$FILE_LOC_NAME; echo \$FILE_LOC_NAME created successfully!'" /home/dev/.bash_aliases
     #sed -i "/#dbdump-site/a alias dbdump-${project_name}='mkdir -p ~/dbdumps-loc/${project_name}; mysqldump -u root -p ${db_name} > ~/dbdumps-loc/${project_name}/${project_name}_loc_\$(getDateForFile).sql; ls -ABrt1 --group-directories-first ~/dbdumps-loc/${project_name}/ | tail -n1'" /home/dev/.bash_aliases
     echo ' -- db dump alias created as dbdump-'${project_name}
   fi

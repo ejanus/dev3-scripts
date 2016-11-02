@@ -83,20 +83,14 @@ if [ -z "${project_name}" ]; then
   exit 1
 fi
 
-valid_regex='a-zA-Z0-9_-'
-#valid_regex='^([a-zA-Z]{1})([a-zA-Z0-9_-]{0,63})'
+valid_regex='a-z0-9_'
 
 if [[ $project_name =~ [^$valid_regex] ]]; then
-#   printf "****************************************************************************************************************************\n"
-#   printf "* Error: project name may only contain letters, numbers, dashes, and underscores and must not be longer then 64 characters *\n"
-#   printf "****************************************************************************************************************************\n"
   printf "*******************************************************************************************************************\n"
   printf "* Error: This script only works with a project_name that only contain lowercase letters, numbers, and underscores *\n"
   printf "*******************************************************************************************************************\n"
   exit 1
 fi
-
-exit 1
 
 if [ -z "${site_name}" ]; then
   printf "**************************************\n"
@@ -280,7 +274,7 @@ add_aliases() {
   if grep -q "dbdump-${project_name}" /home/dev/.bash_aliases; then
     echo ' ** dbdump alias already exists'
   else
-    sed -i "/#dbdump-site/a alias dbdump-${project_name}='FILE_LOC_NAME=~/dbdumps-loc/${project_name}/${project_name}_loc_\$(getDateForFile).sql &&  mysqldump ${project_name} > \$FILE_LOC_NAME; echo \$FILE_LOC_NAME created successfully!'" /home/dev/.bash_aliases
+    sed -i "/#dbdump-site/a alias dbdump-${project_name}='FILE_LOC_NAME=~/dbdumps-loc/${project_name}/${project_name}_loc_\$(getDateForFile).sql &&  mysqldump -u root -p ${project_name} > \$FILE_LOC_NAME; echo \$FILE_LOC_NAME created successfully!'" /home/dev/.bash_aliases
     #sed -i "/#dbdump-site/a alias dbdump-${project_name}='mkdir -p ~/dbdumps-loc/${project_name}; mysqldump -u root -p ${project_name} > ~/dbdumps-loc/${project_name}/${project_name}_loc_\$(getDateForFile).sql; ls -ABrt1 --group-directories-first ~/dbdumps-loc/${project_name}/ | tail -n1'" /home/dev/.bash_aliases
     echo ' -- db dump alias created as dbdump-'${project_name}
   fi
