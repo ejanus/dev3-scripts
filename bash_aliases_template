@@ -9,7 +9,7 @@ getDrupalPassHash() {
   php ./scripts/password-hash.sh $1;
 }
 findFile() {
-  find . -type f -name "$1"
+  find ~/ -type f -name "$1"
 }
 grepShow() {
   grep -rl "$1" | xargs grep -H "$1"
