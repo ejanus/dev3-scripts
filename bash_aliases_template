@@ -41,19 +41,26 @@ alias php-mods="dpkg --list | grep php"
 #git
 alias git-noperms="git config core.fileMode false"
 
-# other helpful aliases
+# environment
 alias src-bashrc="source $HOME/.bashrc"
 alias src-aliases="unalias -a && source $HOME/.bash_aliases"
+alias src-all="src-aliases && src-bashrc"
+
+# file info
+alias fsizel="du -sm * | sort -n"
+alias fsize=getfoldersize
+alias listf="ls -l | awk '{print $9}'"
+alias count-files="ls -l | wc -l"
+
+# find things
 alias lookfor='grep -rl'
 alias lookfor-show=grepShow
-alias count="ls -l | wc -l"
-alias fsize=getfoldersize
+alias find-file=findFile
+
+# other
 alias clear-bash="cat /dev/null > ~/.bash_history && history -c"
-alias fsizel="du -sm * | sort -n"
-alias listf="ls -l | awk '{print $9}'"
 alias ssh-aliases="cat ~/.ssh/config | grep Host'\s'"
 alias time-sync="sudo ntpdate time.nist.gov"
-alias find-file=findFile
 
 ## DRUPAL 
 
