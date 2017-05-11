@@ -161,7 +161,7 @@ finalize() {
   echo ""
   echo "IMPORTANT: To clear your alias cache please run the following command:"
   echo ""
-  echo "src-aliases && src-bashrc"
+  echo "src-all"
   echo ""
 
   exit 0
