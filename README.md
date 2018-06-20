@@ -7,7 +7,7 @@ These are the scripts that work the magic for managing sites on Dev3.
 1. Update your scripts:  
     `git pull origin master`
 
-done!  
+all set!  
  
   
 ***
