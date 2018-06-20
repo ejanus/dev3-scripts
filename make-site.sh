@@ -106,7 +106,7 @@ fi
 path_vhosts='/etc/apache2/sites-available'
 vhost_drupal_template='drupal-default.conf'
 vhost_project=${project_name}.conf
-path_webroot='/var/www/html'
+path_webroot='/var/www'
 project_tmpdir='/var/tmp/'${project_name}
 dbdumps_loc='/home/dev/dbdumps-loc/'${project_name}
 

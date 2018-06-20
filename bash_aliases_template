@@ -25,7 +25,7 @@ alias drush-enabled="drush pm-list --type=Module --status=enabled"
 alias drush-disabled="drush pm-list --type=Module --status=disabled"
 
 #apache
-alias sites="cd /var/www/html; ls -lha"
+alias sites="cd /var/www; ls -lha"
 alias sites-av="cd /etc/apache2/sites-available; ls -lha"
 alias sites-en="cd /etc/apache2/sites-enabled; ls -lha"
 alias sites-log="cd /var/log/apache2; ls -lha"
